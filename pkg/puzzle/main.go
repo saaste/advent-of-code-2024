@@ -3,6 +3,7 @@ package puzzle
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/saaste/advent-of-code-2024/pkg/input"
 )
@@ -13,6 +14,7 @@ type DayPuzzle interface {
 }
 
 func RunPuzzle(day, step int) {
+	defer timer()()
 	if step < 1 || step > 2 {
 		log.Fatalf("invalid step %d", step)
 	}
@@ -29,7 +31,7 @@ func RunPuzzle(day, step int) {
 	} else {
 		result = puzzle.Step2(input)
 	}
-	fmt.Printf("Day %d / Step %d: %s\n", day, step, result)
+	fmt.Printf("Day %d / Step %d result: %s\n", day, step, result)
 }
 
 func ValidatePuzzle(day, step int) {
@@ -44,7 +46,12 @@ func ValidatePuzzle(day, step int) {
 
 	input := input.ReadFile(day)
 
-	expected := correctAnswers[day].Step1
+	var expected string
+	if step == 1 {
+		expected = correctAnswers[day].Step1
+	} else {
+		expected = correctAnswers[day].Step2
+	}
 
 	var actual string
 	if step == 1 {
@@ -59,6 +66,13 @@ func ValidatePuzzle(day, step int) {
 		fmt.Printf("Actual %s\n", expected)
 	} else {
 		fmt.Printf("Day %d / Step %d is VALID\n", day, step)
+	}
+}
+
+func timer() func() {
+	start := time.Now()
+	return func() {
+		fmt.Printf("Execution time %v\n", time.Since(start))
 	}
 }
 
