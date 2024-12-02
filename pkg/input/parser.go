@@ -7,6 +7,7 @@ import (
 )
 
 func EachLineAsString(data string) []string {
+	data = strings.ReplaceAll(data, "\r\n", "\n")
 	return strings.Split(data, "\n")
 }
 
