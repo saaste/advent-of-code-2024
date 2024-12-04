@@ -21,6 +21,15 @@ func CommaSeparatedInts(data string) []int32 {
 	return stringsToInts(values)
 }
 
+func CharacterGrid(data string) [][]string {
+	grid := make([][]string, 0)
+	rows := EachLineAsString(data)
+	for _, row := range rows {
+		grid = append(grid, strings.Split(row, ""))
+	}
+	return grid
+}
+
 type StringGroup struct {
 	GroupIdentifier string
 	Lines           []string
