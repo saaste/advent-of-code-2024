@@ -6,8 +6,12 @@ import (
 	"strings"
 )
 
+func normalize(data string) string {
+	return strings.ReplaceAll(data, "\r\n", "\n")
+}
+
 func EachLineAsString(data string) []string {
-	data = strings.ReplaceAll(data, "\r\n", "\n")
+	data = normalize(data)
 	return strings.Split(data, "\n")
 }
 
@@ -28,6 +32,11 @@ func CharacterGrid(data string) [][]string {
 		grid = append(grid, strings.Split(row, ""))
 	}
 	return grid
+}
+
+func SplitByEmptyLine(data string) []string {
+	data = normalize(data)
+	return strings.Split(data, "\n\n")
 }
 
 type StringGroup struct {
