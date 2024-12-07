@@ -12,7 +12,7 @@ var correctAnswers = map[int]correctAnswer{
 	4:  {Step1: "2530", Step2: "1921"},
 	5:  {Step1: "5651", Step2: "4743"},
 	6:  {Step1: "4819", Step2: "1796"},
-	7:  {Step1: "", Step2: ""},
+	7:  {Step1: "8401132154762", Step2: "95297119227552"},
 	8:  {Step1: "", Step2: ""},
 	9:  {Step1: "", Step2: ""},
 	10: {Step1: "", Step2: ""},
