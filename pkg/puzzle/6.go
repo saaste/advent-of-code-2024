@@ -18,6 +18,10 @@ func (p *Point2D) Equals(p2 *Point2D) bool {
 	return p.X == p2.X && p.Y == p2.Y
 }
 
+func (p *Point2D) ToKey() string {
+	return fmt.Sprintf("%d,%d", p.X, p.Y)
+}
+
 type Point2DWithFacing struct {
 	X      int
 	Y      int
