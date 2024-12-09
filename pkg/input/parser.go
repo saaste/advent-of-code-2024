@@ -25,6 +25,18 @@ func CommaSeparatedInts(data string) []int32 {
 	return stringsToInts(values)
 }
 
+func IntSlice(data string) []int {
+	ints := make([]int, 0)
+	for _, val := range strings.Split(data, "") {
+		intVal, err := strconv.ParseInt(val, 10, 32)
+		if err != nil {
+			log.Fatalf("unable to parse %s to int", val)
+		}
+		ints = append(ints, int(intVal))
+	}
+	return ints
+}
+
 func CharacterGrid(data string) [][]string {
 	grid := make([][]string, 0)
 	rows := EachLineAsString(data)
