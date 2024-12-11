@@ -25,6 +25,11 @@ func CommaSeparatedInts(data string) []int32 {
 	return stringsToInts(values)
 }
 
+func SpaceSeparatedInts(data string) []int64 {
+	values := strings.Split(data, " ")
+	return stringsToInt64s(values)
+}
+
 func IntSlice(data string) []int {
 	ints := make([]int, 0)
 	for _, val := range strings.Split(data, "") {
@@ -94,6 +99,18 @@ func stringsToInts(values []string) []int32 {
 			log.Fatalf("failed to parse %s to int: %v", line, err)
 		}
 		result = append(result, int32(value))
+	}
+	return result
+}
+
+func stringsToInt64s(values []string) []int64 {
+	result := make([]int64, 0)
+	for _, line := range values {
+		value, err := strconv.ParseInt(line, 10, 64)
+		if err != nil {
+			log.Fatalf("failed to parse %s to int: %v", line, err)
+		}
+		result = append(result, value)
 	}
 	return result
 }

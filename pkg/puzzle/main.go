@@ -63,7 +63,7 @@ func ValidatePuzzle(day, step int) {
 	if expected != actual {
 		fmt.Printf("Day %d / Step %d is INVALID\n", day, step)
 		fmt.Printf("Expected %s\n", expected)
-		fmt.Printf("Actual %s\n", actual)
+		fmt.Printf("Actual   %s\n", actual)
 	} else {
 		fmt.Printf("Day %d / Step %d is VALID\n", day, step)
 	}
