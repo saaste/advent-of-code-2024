@@ -1,6 +1,7 @@
 package input
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -49,6 +50,18 @@ func CharacterGrid(data string) [][]string {
 		grid = append(grid, strings.Split(row, ""))
 	}
 	return grid
+}
+
+func CharacterMap(data string) map[string]string {
+	result := make(map[string]string)
+	rows := EachLineAsString(data)
+	for y, row := range rows {
+		for x, val := range row {
+			key := fmt.Sprintf("%d,%d", x, y)
+			result[key] = string(val)
+		}
+	}
+	return result
 }
 
 func SplitByEmptyLine(data string) []string {
