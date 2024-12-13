@@ -3,7 +3,6 @@ package puzzle
 import (
 	"fmt"
 	"log"
-	"math"
 	"strconv"
 	"strings"
 
@@ -12,46 +11,51 @@ import (
 
 type Day13 struct{}
 
+type Point2DInt64 struct {
+	X int64
+	Y int64
+}
+
 type Machine struct {
-	MoveA Point2D
-	MoveB Point2D
-	Prize Point2D
+	MoveA Point2DInt64
+	MoveB Point2DInt64
+	Prize Point2DInt64
 }
 
 func (d Day13) Step1(puzzleInput string) string {
-	machines := parseMachines(puzzleInput)
-	tokensSpent := 0
+	machines := parseMachines(puzzleInput, false)
+	tokensSpent := int64(0)
 	for _, machine := range machines {
-		solutions := make([]Point2D, 0)
-		for aMoves := 1; aMoves <= 100; aMoves++ {
-			for bMoves := 1; bMoves <= 100; bMoves++ {
-				xMatches := aMoves*machine.MoveA.X+bMoves*machine.MoveB.X == machine.Prize.X
-				yMatches := aMoves*machine.MoveA.Y+bMoves*machine.MoveB.Y == machine.Prize.Y
-				if xMatches && yMatches {
-					solutions = append(solutions, Point2D{aMoves, bMoves})
-				}
-			}
-		}
-		if len(solutions) == 0 {
-			continue
-		}
-		cheapestSolutionPrice := math.MaxInt32
-		for _, solution := range solutions {
-			price := solution.X*3 + solution.Y*1
-			if price < cheapestSolutionPrice {
-				cheapestSolutionPrice = price
-			}
-		}
-		tokensSpent += cheapestSolutionPrice
+		tokensSpent += cramersRule(machine)
 	}
 	return fmt.Sprintf("%d", tokensSpent)
 }
 
 func (d Day13) Step2(puzzleInput string) string {
-	return ""
+	machines := parseMachines(puzzleInput, true)
+
+	totalPrice := int64(0)
+	for _, machine := range machines {
+		totalPrice += cramersRule(machine)
+
+	}
+
+	return fmt.Sprintf("%d", totalPrice)
 }
 
-func parseMachines(puzzleInput string) []Machine {
+func cramersRule(machine Machine) int64 {
+	determinant := machine.MoveA.X*machine.MoveB.Y - machine.MoveA.Y*machine.MoveB.X
+	n := (machine.Prize.X*machine.MoveB.Y - machine.Prize.Y*machine.MoveB.X) / determinant
+	m := (machine.MoveA.X*machine.Prize.Y - machine.MoveA.Y*machine.Prize.X) / determinant
+
+	if machine.MoveA.X*n+machine.MoveB.X*m == machine.Prize.X && machine.MoveA.Y*n+machine.MoveB.Y*m == machine.Prize.Y {
+		return n*3 + m
+	}
+
+	return 0
+}
+
+func parseMachines(puzzleInput string, makeItBig bool) []Machine {
 	machines := make([]Machine, 0)
 	lines := input.EachLineAsString(puzzleInput)
 
@@ -65,17 +69,17 @@ func parseMachines(puzzleInput string) []Machine {
 			part1 := strings.ReplaceAll(parts[0], "Button A: X", "")
 			part2 := strings.ReplaceAll(parts[1], "Y+", "")
 
-			x, err := strconv.ParseInt(part1, 10, 32)
+			x, err := strconv.ParseInt(part1, 10, 64)
 			if err != nil {
 				log.Fatalf("unable to parse %s to int", part1)
 			}
 
-			y, err := strconv.ParseInt(part2, 10, 32)
+			y, err := strconv.ParseInt(part2, 10, 64)
 			if err != nil {
 				log.Fatalf("unable to parse %s to int", part2)
 			}
 
-			currentMachine.MoveA = Point2D{X: int(x), Y: int(y)}
+			currentMachine.MoveA = Point2DInt64{X: x, Y: y}
 			continue
 		}
 
@@ -84,17 +88,17 @@ func parseMachines(puzzleInput string) []Machine {
 			part1 := strings.ReplaceAll(parts[0], "Button B: X", "")
 			part2 := strings.ReplaceAll(parts[1], "Y+", "")
 
-			x, err := strconv.ParseInt(part1, 10, 32)
+			x, err := strconv.ParseInt(part1, 10, 64)
 			if err != nil {
 				log.Fatalf("unable to parse %s to int", part1)
 			}
 
-			y, err := strconv.ParseInt(part2, 10, 32)
+			y, err := strconv.ParseInt(part2, 10, 64)
 			if err != nil {
 				log.Fatalf("unable to parse %s to int", part2)
 			}
 
-			currentMachine.MoveB = Point2D{X: int(x), Y: int(y)}
+			currentMachine.MoveB = Point2DInt64{X: x, Y: y}
 			continue
 		}
 
@@ -103,17 +107,22 @@ func parseMachines(puzzleInput string) []Machine {
 			part1 := strings.ReplaceAll(parts[0], "Prize: X=", "")
 			part2 := strings.ReplaceAll(parts[1], "Y=", "")
 
-			x, err := strconv.ParseInt(part1, 10, 32)
+			x, err := strconv.ParseInt(part1, 10, 64)
 			if err != nil {
 				log.Fatalf("unable to parse %s to int", part1)
 			}
 
-			y, err := strconv.ParseInt(part2, 10, 32)
+			y, err := strconv.ParseInt(part2, 10, 64)
 			if err != nil {
 				log.Fatalf("unable to parse %s to int", part2)
 			}
 
-			currentMachine.Prize = Point2D{X: int(x), Y: int(y)}
+			if makeItBig {
+				x = x + 10000000000000
+				y = y + 10000000000000
+			}
+
+			currentMachine.Prize = Point2DInt64{X: x, Y: y}
 			machines = append(machines, currentMachine)
 			continue
 		}
