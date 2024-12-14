@@ -16,6 +16,10 @@ type Point2DInt64 struct {
 	Y int64
 }
 
+func (p *Point2DInt64) GetKey() string {
+	return fmt.Sprintf("%d,%d", p.X, p.Y)
+}
+
 type Machine struct {
 	MoveA Point2DInt64
 	MoveB Point2DInt64

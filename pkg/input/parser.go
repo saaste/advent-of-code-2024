@@ -43,6 +43,14 @@ func IntSlice(data string) []int {
 	return ints
 }
 
+func StringAsInt64(s string) int64 {
+	value, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		log.Fatalf("unable to parse %s as int64", s)
+	}
+	return value
+}
+
 func CharacterGrid(data string) [][]string {
 	grid := make([][]string, 0)
 	rows := EachLineAsString(data)
