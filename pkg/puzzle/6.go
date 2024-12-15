@@ -22,6 +22,10 @@ func (p *Point2D) ToKey() string {
 	return fmt.Sprintf("%d,%d", p.X, p.Y)
 }
 
+func (p *Point2D) Add(vector Point2D) Point2D {
+	return Point2D{X: p.X + vector.X, Y: p.Y + vector.Y}
+}
+
 type Point2DWithFacing struct {
 	X      int
 	Y      int
