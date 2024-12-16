@@ -2,6 +2,7 @@ package puzzle
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/saaste/advent-of-code-2024/pkg/input"
@@ -24,6 +25,10 @@ func (p *Point2D) ToKey() string {
 
 func (p *Point2D) Add(vector Point2D) Point2D {
 	return Point2D{X: p.X + vector.X, Y: p.Y + vector.Y}
+}
+
+func (p *Point2D) Distance(p2 *Point2D) int {
+	return int(math.Abs(float64(p.X-p2.X)) + math.Abs(float64(p.Y-p2.Y)))
 }
 
 type Point2DWithFacing struct {
